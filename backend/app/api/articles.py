@@ -8,7 +8,32 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.article import Article
 
+from datetime import date
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy import select, desc, func
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import get_db
+from app.models.article import Article
+
 router = APIRouter()
+
+
+@router.get("/articles/top")
+async def top_articles(
+    limit: int = Query(10, ge=1, le=50),
+    db: AsyncSession = Depends(get_db),
+):
+    """Top N articles: by heat_score when available, else by recency."""
+    stmt = (
+        select(Article)
+        .order_by(desc(Article.heat_score), desc(Article.published_at))
+        .limit(limit)
+    )
+    articles = (await db.scalars(stmt)).all()
+    return [_serialize(a) for a in articles]
 
 
 @router.get("/articles")

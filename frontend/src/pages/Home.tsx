@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ArticleCard } from '../components/ArticleCard';
 import { FilterBar } from '../components/FilterBar';
+import { TopList } from '../components/TopList';
 import { fetchArticles } from '../api/client';
 import type { Article } from '../types';
 import './Home.css';
@@ -41,6 +42,8 @@ export function Home() {
 
   return (
     <div className="home">
+      <TopList />
+
       <FilterBar
         sourceType={sourceType}
         category={category}

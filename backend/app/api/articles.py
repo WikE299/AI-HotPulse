@@ -1,4 +1,3 @@
-import uuid
 from datetime import date
 from typing import Optional
 
@@ -52,7 +51,7 @@ async def list_articles(
 
 
 @router.get("/articles/{article_id}")
-async def get_article(article_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
+async def get_article(article_id: str, db: AsyncSession = Depends(get_db)):
     article = await db.get(Article, article_id)
     if not article:
         from fastapi import HTTPException

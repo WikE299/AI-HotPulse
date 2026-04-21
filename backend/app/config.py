@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/hotpulse"
+    database_url: str = "sqlite+aiosqlite:///./hotpulse.db"
     anthropic_api_key: str = ""
     cors_origins: str = "http://localhost:5173"
     crawl_schedule_hour: int = 8

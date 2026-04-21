@@ -1,16 +1,14 @@
 from datetime import datetime, timezone
-import uuid
+import json
 
-from sqlalchemy import select, and_
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
 
-from app.analysis.claude_analyzer import analyze_batch
+from app.config import settings
 from app.crawlers.arxiv import ArXivCrawler
 from app.crawlers.hackernews import HackerNewsCrawler
 from app.crawlers.reddit import RedditCrawler
 from app.crawlers.rss_crawler import RSSCrawler
 from app.database import AsyncSessionLocal
-from app.models.article import Article
 
 
 async def run_crawl_pipeline():
@@ -23,34 +21,56 @@ async def run_crawl_pipeline():
         except Exception:
             pass
 
+    # Deduplicate within batch
+    seen: set[str] = set()
+    unique_raw = []
+    for a in all_raw:
+        if a.original_url not in seen:
+            seen.add(a.original_url)
+            unique_raw.append(a)
+
+    if not unique_raw:
+        return 0
+
+    # Run AI analysis only when API key is configured
+    if settings.anthropic_api_key:
+        from app.analysis.claude_analyzer import analyze_batch
+        analyses = await analyze_batch(unique_raw)
+    else:
+        analyses = [{"summary": None, "keywords": [], "category": "Other", "heat_score": 0}] * len(unique_raw)
+
+    import uuid
+    now = datetime.now(tz=timezone.utc).isoformat()
+    rows = []
+    for raw, analysis in zip(unique_raw, analyses):
+        rows.append({
+            "id": str(uuid.uuid4()),
+            "title": raw.title,
+            "source": raw.source,
+            "source_type": raw.source_type,
+            "original_url": raw.original_url,
+            "published_at": raw.published_at.isoformat() if raw.published_at else None,
+            "crawled_at": now,
+            "image_url": raw.image_url,
+            "content_snippet": raw.content_snippet,
+            "summary": analysis.get("summary"),
+            "keywords": json.dumps(analysis.get("keywords") or []),
+            "category": analysis.get("category", "Other"),
+            "heat_score": analysis.get("heat_score", 0),
+        })
+
     async with AsyncSessionLocal() as db:
-        # Filter already-known URLs
-        urls = [a.original_url for a in all_raw]
-        existing = await db.scalars(select(Article.original_url).where(Article.original_url.in_(urls)))
-        existing_urls = set(existing.all())
-        new_articles = [a for a in all_raw if a.original_url not in existing_urls]
-
-        if not new_articles:
-            return 0
-
-        analyses = await analyze_batch(new_articles)
-
-        for raw, analysis in zip(new_articles, analyses):
-            article = Article(
-                title=raw.title,
-                source=raw.source,
-                source_type=raw.source_type,
-                original_url=raw.original_url,
-                published_at=raw.published_at,
-                crawled_at=datetime.now(tz=timezone.utc),
-                image_url=raw.image_url,
-                content_snippet=raw.content_snippet,
-                summary=analysis.get("summary"),
-                keywords=analysis.get("keywords") or [],
-                category=analysis.get("category", "Other"),
-                heat_score=analysis.get("heat_score", 0),
+        for row in rows:
+            await db.execute(
+                text(
+                    "INSERT OR IGNORE INTO articles "
+                    "(id, title, source, source_type, original_url, published_at, crawled_at, "
+                    "image_url, content_snippet, summary, keywords, category, heat_score) "
+                    "VALUES (:id, :title, :source, :source_type, :original_url, :published_at, :crawled_at, "
+                    ":image_url, :content_snippet, :summary, :keywords, :category, :heat_score)"
+                ),
+                row,
             )
-            db.add(article)
-
         await db.commit()
-    return len(new_articles)
+
+    return len(rows)

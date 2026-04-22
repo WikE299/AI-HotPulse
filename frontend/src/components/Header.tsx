@@ -2,6 +2,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { triggerCrawl } from '../api/client';
 import './Header.css';
 
+const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+
 export function Header() {
   async function handleTrigger() {
     try {
@@ -14,26 +16,21 @@ export function Header() {
 
   return (
     <header className="header">
-      <Link to="/" className="logo">
-        <span className="logo-icon">⚡</span>
-        <span className="logo-text">AI HotPulse</span>
-      </Link>
-      <nav className="nav">
-        <NavLink to="/" end className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-          热点
-        </NavLink>
-        <NavLink to="/topics" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-          话题
-        </NavLink>
-        <NavLink to="/papers" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-          论文
-        </NavLink>
-        <NavLink to="/brief" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-          简报
-        </NavLink>
-        <button className="trigger-btn" onClick={handleTrigger}>
-          立即抓取
-        </button>
+      <div className="masthead">
+        <span className="masthead-meta">
+          <span className="live-dot" />
+          <span className="masthead-date">{today}</span>
+        </span>
+        <Link to="/" className="logo">AI HOTPULSE</Link>
+        <div className="masthead-right">
+          <button className="crawl-btn" onClick={handleTrigger}>抓取 ▶</button>
+        </div>
+      </div>
+      <nav className="nav-strip">
+        <NavLink to="/" end className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>热点</NavLink>
+        <NavLink to="/topics" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>话题</NavLink>
+        <NavLink to="/papers" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>论文</NavLink>
+        <NavLink to="/brief" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>简报</NavLink>
       </nav>
     </header>
   );

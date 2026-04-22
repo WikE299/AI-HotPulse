@@ -31,7 +31,7 @@ export function BriefPage() {
 
   return (
     <div className="brief-page">
-      <div className="brief-header">
+      <div className="brief-heading">
         <div>
           <h1 className="brief-title">每日 AI 简报</h1>
           <p className="brief-subtitle">精选 AI 热点，每日一读</p>

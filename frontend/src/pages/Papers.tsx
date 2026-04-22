@@ -19,17 +19,15 @@ export function Papers() {
 
   return (
     <div className="papers-page">
-      <div className="papers-header">
+      <div className="papers-heading">
         <h1 className="papers-title">论文速读</h1>
-        <p className="papers-subtitle">AI 学术前沿，核心贡献一眼看懂</p>
+        <p className="papers-subtitle">AI 学术前沿 · 核心贡献一眼看懂</p>
       </div>
 
-      {loading && <div className="papers-loading">加载中…</div>}
+      {loading && <div className="papers-loading">LOADING…</div>}
 
       {!loading && data && data.items.length === 0 && (
-        <div className="papers-empty">
-          暂无论文数据。触发一次抓取后，ArXiv 论文将自动出现在这里。
-        </div>
+        <div className="papers-empty">NO PAPERS YET — 触发抓取后 ArXiv 论文将出现在这里</div>
       )}
 
       <div className="papers-grid">
@@ -40,21 +38,9 @@ export function Papers() {
 
       {data && (
         <div className="papers-pagination">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="page-btn"
-          >
-            上一页
-          </button>
-          <span className="page-info">第 {page} 页</span>
-          <button
-            onClick={() => setPage((p) => p + 1)}
-            disabled={!data.items.length || data.items.length < 20}
-            className="page-btn"
-          >
-            下一页
-          </button>
+          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="page-btn">← 上一页</button>
+          <span className="page-info">P.{page}</span>
+          <button onClick={() => setPage((p) => p + 1)} disabled={!data.items.length || data.items.length < 20} className="page-btn">下一页 →</button>
         </div>
       )}
     </div>

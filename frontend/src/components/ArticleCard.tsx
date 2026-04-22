@@ -3,70 +3,60 @@ import dayjs from 'dayjs';
 import type { Article } from '../types';
 import './ArticleCard.css';
 
-const SOURCE_TYPE_LABELS: Record<string, string> = {
-  chinese: '中文',
-  english: 'EN',
-  academic: '学术',
-  social: '社交',
+const TYPE_LABELS: Record<string, string> = {
+  chinese: 'CN', english: 'EN', academic: 'ARXIV', social: 'SOCIAL',
 };
 
-const CATEGORY_COLORS: Record<string, string> = {
-  LLM: '#6366f1',
-  CV: '#f59e0b',
-  Robotics: '#10b981',
-  Industry: '#3b82f6',
-  Research: '#8b5cf6',
-  Other: '#6b7280',
+const CAT_LABELS: Record<string, string> = {
+  LLM: 'LLM', CV: 'CV', Robotics: 'ROBOT', Industry: 'BIZ', Research: 'RES', Other: '—',
 };
+
+function HeatBar({ score }: { score: number }) {
+  const filled = Math.round(score / 2);
+  return (
+    <span className="heat-bar">
+      {'█'.repeat(filled)}{'░'.repeat(5 - filled)}
+      <span className="heat-num"> {score}</span>
+    </span>
+  );
+}
 
 export function ArticleCard({ article }: { article: Article }) {
-  const typeLabel = article.source_type ? SOURCE_TYPE_LABELS[article.source_type] ?? article.source_type : '';
-  const categoryColor = article.category ? (CATEGORY_COLORS[article.category] ?? '#6b7280') : '#6b7280';
+  const typeLabel = article.source_type ? (TYPE_LABELS[article.source_type] ?? article.source_type.toUpperCase()) : '';
+  const catLabel = article.category ? (CAT_LABELS[article.category] ?? article.category) : '';
+  const hot = article.heat_score >= 7;
 
   return (
-    <Link to={`/article/${article.id}`} className="article-card">
-      {article.image_url && (
-        <div className="card-image">
-          <img src={article.image_url} alt="" loading="lazy" onError={(e) => (e.currentTarget.style.display = 'none')} />
-        </div>
-      )}
-      <div className="card-body">
-        <div className="card-meta">
-          <span className="source-badge">{typeLabel}</span>
-          <span className="source-name">{article.source}</span>
-          <span className="publish-time">
-            {article.published_at ? dayjs(article.published_at).format('MM-DD HH:mm') : ''}
-          </span>
-          {article.heat_score > 0 && (
-            <span className="heat-score">🔥 {article.heat_score}</span>
-          )}
-        </div>
+    <Link to={`/article/${article.id}`} className={`article-card ${hot ? 'article-card--hot' : ''}`}>
+      <div className="card-top">
+        <span className="card-type">{typeLabel}</span>
+        {catLabel && <span className="card-cat">{catLabel}</span>}
+        <span className="card-time">
+          {article.published_at ? dayjs(article.published_at).format('MM-DD HH:mm') : ''}
+        </span>
+        {article.heat_score > 0 && <HeatBar score={article.heat_score} />}
+      </div>
 
-        <h3 className="card-title">{article.title}</h3>
+      <h3 className="card-title">{article.title}</h3>
 
-        {article.summary && <p className="card-summary">{article.summary}</p>}
+      {article.summary && <p className="card-summary">{article.summary}</p>}
 
-        <div className="card-footer">
-          <div className="keywords">
-            {article.category && (
-              <span className="category-chip" style={{ backgroundColor: categoryColor }}>
-                {article.category}
-              </span>
-            )}
-            {article.keywords.slice(0, 4).map((kw) => (
-              <span key={kw} className="keyword-chip">{kw}</span>
-            ))}
-          </div>
-          <a
-            href={article.original_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="original-link"
-            onClick={(e) => e.stopPropagation()}
-          >
-            原文 ↗
-          </a>
+      <div className="card-bottom">
+        <span className="card-source">{article.source}</span>
+        <div className="card-kws">
+          {article.keywords.slice(0, 3).map((kw) => (
+            <span key={kw} className="card-kw">{kw}</span>
+          ))}
         </div>
+        <a
+          href={article.original_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="card-link"
+          onClick={(e) => e.stopPropagation()}
+        >
+          原文 ↗
+        </a>
       </div>
     </Link>
   );

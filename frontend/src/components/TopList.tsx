@@ -5,9 +5,19 @@ import { fetchTopArticles } from '../api/client';
 import type { Article } from '../types';
 import './TopList.css';
 
-const SOURCE_TYPE_LABELS: Record<string, string> = {
-  chinese: '中文', english: 'EN', academic: '学术', social: '社交',
+const TYPE_LABELS: Record<string, string> = {
+  chinese: 'CN', english: 'EN', academic: 'ARXIV', social: 'SOCIAL',
 };
+
+function HeatBlocks({ score }: { score: number }) {
+  const filled = Math.round(score / 2);
+  return (
+    <span className="tl-heat">
+      <span className="tl-heat-bar">{'█'.repeat(filled)}{'░'.repeat(5 - filled)}</span>
+      <span className="tl-heat-num">{score}</span>
+    </span>
+  );
+}
 
 export function TopList() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -17,43 +27,30 @@ export function TopList() {
     fetchTopArticles(10).then(setArticles).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="top-loading">加载中...</div>;
+  if (loading) return <div className="tl-loading">LOADING…</div>;
   if (!articles.length) return null;
 
   return (
-    <div className="top-list">
-      <div className="top-header">
-        <span className="top-title">🔥 今日 AI 热榜</span>
-        <span className="top-sub">按热度排序</span>
+    <div className="tl-wrap">
+      <div className="tl-header">
+        <span className="tl-title">SIGNAL RANKING</span>
+        <span className="tl-sub">热度 TOP 10</span>
       </div>
-      <ol className="top-items">
-        {articles.map((a, i) => (
-          <li key={a.id} className={`top-item ${i < 3 ? 'top-item--podium' : ''}`}>
-            <span className={`rank rank-${i + 1}`}>{i + 1}</span>
-            <div className="top-item-body">
-              <Link to={`/article/${a.id}`} className="top-item-title">
-                {a.title}
-              </Link>
-              <div className="top-item-meta">
-                {a.source_type && (
-                  <span className="top-badge">{SOURCE_TYPE_LABELS[a.source_type] ?? a.source_type}</span>
-                )}
-                <span className="top-source">{a.source}</span>
-                {a.published_at && (
-                  <span className="top-time">{dayjs(a.published_at).format('MM-DD HH:mm')}</span>
-                )}
-                {a.heat_score > 0 && <span className="top-heat">热度 {a.heat_score}</span>}
+      <ol className="tl-list">
+        {articles.map((a: Article, i: number) => (
+          <li key={a.id} className={`tl-item ${i < 3 ? 'tl-item--top' : ''}`}>
+            <span className={`tl-rank tl-rank--${i + 1}`}>{String(i + 1).padStart(2, '0')}</span>
+            <div className="tl-body">
+              <Link to={`/article/${a.id}`} className="tl-title-link">{a.title}</Link>
+              <div className="tl-meta">
+                {a.source_type && <span className="tl-badge">{TYPE_LABELS[a.source_type] ?? a.source_type}</span>}
+                <span className="tl-source">{a.source}</span>
+                {a.published_at && <span className="tl-time">{dayjs(a.published_at).format('MM-DD HH:mm')}</span>}
               </div>
             </div>
-            <a
-              href={a.original_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="top-link"
-              onClick={(e) => e.stopPropagation()}
-            >
-              ↗
-            </a>
+            {a.heat_score > 0 && <HeatBlocks score={a.heat_score} />}
+            <a href={a.original_url} target="_blank" rel="noopener noreferrer"
+               className="tl-ext" onClick={(e) => e.stopPropagation()}>↗</a>
           </li>
         ))}
       </ol>

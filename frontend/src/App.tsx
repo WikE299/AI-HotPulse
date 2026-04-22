@@ -6,6 +6,7 @@ import { Papers } from './pages/Papers';
 import { Topics } from './pages/Topics';
 import { TopicDetail } from './pages/TopicDetail';
 import { BriefPage } from './pages/Brief';
+import { Timeline } from './pages/Timeline';
 import './App.css';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/topics" element={<Topics />} />
           <Route path="/topics/:id" element={<TopicDetail />} />
           <Route path="/brief" element={<BriefPage />} />
+          <Route path="/timeline" element={<Timeline />} />
         </Routes>
       </main>
     </BrowserRouter>

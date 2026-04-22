@@ -59,3 +59,25 @@ export interface Brief {
   article_ids: string;
   generated_at: string | null;
 }
+
+export interface Benchmarks {
+  MMLU?: number;
+  HumanEval?: number;
+  MATH?: number;
+  GSM8K?: number;
+  ARC?: number;
+  [key: string]: number | undefined;
+}
+
+export interface ModelRelease {
+  id: string;
+  model_name: string;
+  organization: string;
+  version: string | null;
+  release_date: string;
+  parameters_size: string | null;
+  description: string | null;
+  benchmarks: Benchmarks;
+  announcement_url: string | null;
+  category: string;
+}

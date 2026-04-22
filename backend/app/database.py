@@ -19,12 +19,13 @@ async def get_db() -> AsyncSession:
 
 async def init_db():
     # Import all models so they register with Base.metadata
-    from app.models import article, topic, brief  # noqa
+    from app.models import article, topic, brief, model_release  # noqa
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        # Migrate existing tables: add new columns if missing
         await _migrate(conn)
+        from app.seed_model_releases import seed_model_releases
+        await seed_model_releases(conn)
 
 
 async def _migrate(conn):

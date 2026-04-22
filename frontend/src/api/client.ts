@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Article, ArticlesResponse, FilterParams, TopicsResponse, TopicDetail, Brief } from '../types';
+import type { Article, ArticlesResponse, FilterParams, TopicsResponse, TopicDetail, Brief, ModelRelease } from '../types';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
@@ -54,5 +54,12 @@ export async function generateBrief(): Promise<Brief> {
 
 export async function triggerCrawl() {
   const { data } = await api.post('/crawl/trigger');
+  return data;
+}
+
+export async function fetchModelReleases(organization?: string): Promise<ModelRelease[]> {
+  const { data } = await api.get<ModelRelease[]>('/model-releases', {
+    params: organization ? { organization } : {},
+  });
   return data;
 }

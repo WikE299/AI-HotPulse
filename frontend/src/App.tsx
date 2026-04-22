@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Home } from './pages/Home';
 import { ArticleDetail } from './pages/ArticleDetail';
+import { Papers } from './pages/Papers';
+import { Topics } from './pages/Topics';
+import { TopicDetail } from './pages/TopicDetail';
+import { BriefPage } from './pages/Brief';
 import './App.css';
 
 export default function App() {
@@ -12,6 +16,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/article/:id" element={<ArticleDetail />} />
+          <Route path="/papers" element={<Papers />} />
+          <Route path="/topics" element={<Topics />} />
+          <Route path="/topics/:id" element={<TopicDetail />} />
+          <Route path="/brief" element={<BriefPage />} />
         </Routes>
       </main>
     </BrowserRouter>

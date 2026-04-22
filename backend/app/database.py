@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import text
 
 from app.config import settings
 
@@ -17,5 +18,24 @@ async def get_db() -> AsyncSession:
 
 
 async def init_db():
+    # Import all models so they register with Base.metadata
+    from app.models import article, topic, brief  # noqa
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Migrate existing tables: add new columns if missing
+        await _migrate(conn)
+
+
+async def _migrate(conn):
+    new_cols = [
+        ("articles", "paper_contribution", "TEXT"),
+        ("articles", "readability_score", "INTEGER"),
+        ("articles", "topic_id",          "TEXT"),
+    ]
+    for table, col, col_type in new_cols:
+        try:
+            await conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}"))
+        except Exception:
+            pass  # Column already exists
+

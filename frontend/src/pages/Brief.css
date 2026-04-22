@@ -1,0 +1,147 @@
+.brief-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.brief-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 16px;
+}
+
+.brief-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brief-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6060a0;
+}
+
+.generate-btn {
+  flex-shrink: 0;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid #f59e0b;
+  background: transparent;
+  color: #f59e0b;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.generate-btn:hover:not(:disabled) {
+  background: #f59e0b;
+  color: #0e0e1a;
+}
+
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.brief-loading,
+.brief-empty {
+  text-align: center;
+  padding: 80px 0;
+  color: #6060a0;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.brief-content-wrap {
+  background: #1e1e2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.brief-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.brief-date {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.brief-gen-time {
+  font-size: 12px;
+  color: #555;
+}
+
+.brief-content h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e2e2f0;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.brief-content h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a5a5c5;
+  margin: 24px 0 12px;
+  padding-left: 12px;
+  border-left: 3px solid #f59e0b;
+}
+
+.brief-content p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #c0c0d8;
+  line-height: 1.8;
+}
+
+.brief-content li {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #c0c0d8;
+  line-height: 1.8;
+  list-style: none;
+  padding-left: 16px;
+  position: relative;
+}
+
+.brief-content li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #f59e0b;
+}
+
+.brief-content strong {
+  color: #e2e2f0;
+  font-weight: 600;
+}
+
+.brief-content a {
+  color: #6366f1;
+  text-decoration: none;
+}
+
+.brief-content a:hover {
+  text-decoration: underline;
+}
+
+.brief-content br {
+  display: block;
+  margin: 4px 0;
+}

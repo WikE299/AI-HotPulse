@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Article, ArticlesResponse, FilterParams } from '../types';
+import type { Article, ArticlesResponse, FilterParams, TopicsResponse, TopicDetail, Brief } from '../types';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
@@ -15,8 +15,40 @@ export async function fetchTopArticles(limit = 10): Promise<Article[]> {
   return data;
 }
 
-export async function fetchArticle(id: string) {
-  const { data } = await api.get(`/articles/${id}`);
+export async function fetchArticle(id: string): Promise<Article> {
+  const { data } = await api.get<Article>(`/articles/${id}`);
+  return data;
+}
+
+export async function fetchPapers(page = 1, pageSize = 20): Promise<ArticlesResponse> {
+  const { data } = await api.get<ArticlesResponse>('/articles', {
+    params: { source_type: 'academic', page, page_size: pageSize },
+  });
+  return data;
+}
+
+export async function fetchTopics(page = 1, pageSize = 20): Promise<TopicsResponse> {
+  const { data } = await api.get<TopicsResponse>('/topics', { params: { page, page_size: pageSize } });
+  return data;
+}
+
+export async function fetchTopic(id: string): Promise<TopicDetail> {
+  const { data } = await api.get<TopicDetail>(`/topics/${id}`);
+  return data;
+}
+
+export async function fetchLatestBrief(): Promise<Brief> {
+  const { data } = await api.get<Brief>('/briefs/latest');
+  return data;
+}
+
+export async function fetchBrief(date: string): Promise<Brief> {
+  const { data } = await api.get<Brief>(`/briefs/${date}`);
+  return data;
+}
+
+export async function generateBrief(): Promise<Brief> {
+  const { data } = await api.post<Brief>('/briefs/generate');
   return data;
 }
 

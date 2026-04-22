@@ -1,14 +1,4 @@
-from datetime import date
-from typing import Optional
-
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy import select, desc
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.database import get_db
-from app.models.article import Article
-
-from datetime import date
+from datetime import date, datetime, timezone, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
@@ -26,7 +16,6 @@ async def top_articles(
     limit: int = Query(10, ge=1, le=50),
     db: AsyncSession = Depends(get_db),
 ):
-    """Top N articles: by heat_score when available, else by recency."""
     stmt = (
         select(Article)
         .order_by(desc(Article.heat_score), desc(Article.published_at))
@@ -55,14 +44,8 @@ async def list_articles(
     if date_from:
         stmt = stmt.where(Article.published_at >= date_from)
     if date_to:
-        from datetime import datetime, timezone, timedelta
         end = datetime.combine(date_to, datetime.max.time()).replace(tzinfo=timezone.utc)
         stmt = stmt.where(Article.published_at <= end)
-
-    total_result = await db.scalars(select(Article.id).order_by(None).where(
-        *([Article.source_type == source_type] if source_type else []),
-        *([Article.category == category] if category else []),
-    ))
 
     offset = (page - 1) * page_size
     stmt = stmt.offset(offset).limit(page_size)
@@ -98,4 +81,7 @@ def _serialize(a: Article) -> dict:
         "category": a.category,
         "heat_score": a.heat_score,
         "content_snippet": a.content_snippet,
+        "paper_contribution": a.paper_contribution,
+        "readability_score": a.readability_score,
+        "topic_id": a.topic_id,
     }

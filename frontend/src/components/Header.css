@@ -36,9 +36,22 @@
   gap: 16px;
 }
 
-.nav-desc {
+.nav-link {
   font-size: 13px;
-  color: #6060a0;
+  color: #8080b0;
+  text-decoration: none;
+  padding: 4px 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.nav-link:hover {
+  color: #e2e2f0;
+}
+
+.nav-link.active {
+  color: #e2e2f0;
+  border-bottom-color: #6366f1;
 }
 
 .trigger-btn {

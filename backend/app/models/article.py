@@ -9,7 +9,6 @@ from app.database import Base
 
 
 class JSONList(TypeDecorator):
-    """Stores a list as JSON text, compatible with SQLite and PostgreSQL."""
     impl = Text
     cache_ok = True
 
@@ -36,3 +35,8 @@ class Article(Base):
     category: Mapped[str | None] = mapped_column(String(50))
     heat_score: Mapped[int] = mapped_column(Integer, default=0)
     content_snippet: Mapped[str | None] = mapped_column(Text)
+    # Paper fields (academic only)
+    paper_contribution: Mapped[str | None] = mapped_column(Text)
+    readability_score: Mapped[int | None] = mapped_column(Integer)
+    # Topic clustering
+    topic_id: Mapped[str | None] = mapped_column(String(36))

@@ -1,0 +1,156 @@
+.paper-card {
+  background: #1e1e2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.paper-card:hover {
+  border-color: #a78bfa;
+  box-shadow: 0 4px 20px rgba(167, 139, 250, 0.12);
+}
+
+.paper-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.paper-badge {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.paper-source {
+  color: #a5a5c5;
+  font-weight: 500;
+}
+
+.paper-date {
+  margin-left: auto;
+  color: #666;
+}
+
+.paper-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #e2e2f0;
+}
+
+.paper-contribution {
+  background: #16162a;
+  border-left: 3px solid #a78bfa;
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+}
+
+.contrib-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.paper-contribution p {
+  margin: 0;
+  font-size: 13px;
+  color: #c0c0d8;
+  line-height: 1.6;
+}
+
+.paper-summary {
+  margin: 0;
+  font-size: 13px;
+  color: #9090b0;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.paper-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.readability {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.readability-label {
+  font-size: 12px;
+  color: #666;
+}
+
+.stars {
+  display: flex;
+  gap: 1px;
+}
+
+.star {
+  font-size: 14px;
+  color: #3a3a5e;
+}
+
+.star.filled {
+  color: #f59e0b;
+}
+
+.readability-hint {
+  font-size: 11px;
+  color: #666;
+}
+
+.paper-links {
+  display: flex;
+  gap: 8px;
+}
+
+.paper-link {
+  font-size: 12px;
+  color: #a78bfa;
+  text-decoration: none;
+  padding: 4px 12px;
+  border: 1px solid #a78bfa;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.paper-link:hover {
+  background: #a78bfa;
+  color: #fff;
+}
+
+.paper-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.paper-kw {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #2a2a3e;
+  color: #9090b0;
+  border: 1px solid #3a3a5e;
+}

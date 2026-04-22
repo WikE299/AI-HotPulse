@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { triggerCrawl } from '../api/client';
 import './Header.css';
 
@@ -19,7 +19,18 @@ export function Header() {
         <span className="logo-text">AI HotPulse</span>
       </Link>
       <nav className="nav">
-        <span className="nav-desc">AI 热点资讯聚合</span>
+        <NavLink to="/" end className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+          热点
+        </NavLink>
+        <NavLink to="/topics" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+          话题
+        </NavLink>
+        <NavLink to="/papers" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+          论文
+        </NavLink>
+        <NavLink to="/brief" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+          简报
+        </NavLink>
         <button className="trigger-btn" onClick={handleTrigger}>
           立即抓取
         </button>

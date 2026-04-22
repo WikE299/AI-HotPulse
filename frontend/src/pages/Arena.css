@@ -1,0 +1,333 @@
+.arena-page {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 32px 28px 64px;
+}
+
+.arena-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-2);
+  margin-bottom: 20px;
+}
+
+.arena-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--text-1);
+}
+
+.arena-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin: 0;
+}
+
+/* ── Filters ── */
+.arena-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.arena-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  border: 1px solid var(--border-2);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.arena-pill:hover {
+  border-color: var(--border-3);
+  color: var(--text-2);
+}
+
+.arena-pill.active {
+  border-color: var(--pill-color, var(--red));
+  color: var(--pill-color, var(--red));
+  background: var(--red-dim);
+}
+
+.arena-status {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 80px 0;
+  color: var(--text-3);
+}
+
+/* ── Body layout ── */
+.arena-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+
+.arena-body > * {
+  background: var(--bg-2);
+}
+
+/* ── Leaderboard table ── */
+.arena-table-wrap {
+  overflow-x: auto;
+  padding: 0;
+}
+
+.arena-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.arena-table-toolbar-left {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+}
+
+.arena-selected-count {
+  color: var(--red);
+}
+
+.arena-clear-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border: 1px solid var(--border-2);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.arena-clear-btn:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.arena-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.arena-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  border-bottom: 1px solid var(--border-2);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.12s;
+}
+
+.arena-table th:hover {
+  color: var(--text-2);
+}
+
+.arena-table th.sorted {
+  color: var(--red);
+}
+
+.arena-sort-arrow {
+  margin-left: 4px;
+  font-size: 8px;
+}
+
+.arena-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.arena-table tr:hover td {
+  background: var(--bg-3);
+}
+
+.arena-table tr.arena-row--selected td {
+  background: var(--red-dim);
+}
+
+.arena-table .arena-cell-rank {
+  width: 36px;
+  text-align: center;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+.arena-table .arena-cell-check {
+  width: 28px;
+  text-align: center;
+}
+
+/* Custom checkbox */
+.arena-check {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-3);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  transition: all 0.12s;
+}
+
+.arena-check:checked {
+  border-color: var(--red);
+  background: var(--red);
+}
+
+.arena-check:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  font-size: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.arena-cell-model {
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.arena-org-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.arena-cell-org {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+
+.arena-cell-score {
+  font-variant-numeric: tabular-nums;
+}
+
+.arena-cell-score--top {
+  color: var(--red);
+  font-weight: 600;
+}
+
+.arena-cell-na {
+  color: var(--border-3);
+}
+
+.arena-cell-composite {
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+/* ── Charts panel ── */
+.arena-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+}
+
+.arena-charts > * {
+  background: var(--bg-2);
+}
+
+/* ── Radar section ── */
+.arena-radar-section {
+  padding: 20px 16px;
+}
+
+.arena-section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  margin-bottom: 12px;
+}
+
+.arena-radar-empty {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text-3);
+}
+
+/* ── Bar chart section ── */
+.arena-bar-section {
+  padding: 20px 16px;
+}
+
+.arena-bench-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.arena-bench-tab {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border: 1px solid var(--border-2);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.arena-bench-tab:hover {
+  border-color: var(--border-3);
+  color: var(--text-2);
+}
+
+.arena-bench-tab.active {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-dim);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .arena-body {
+    grid-template-columns: 1fr;
+  }
+}

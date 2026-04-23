@@ -44,31 +44,33 @@ export function Home() {
     <div className="home">
       <TopList />
 
-      <FilterBar
-        sourceType={sourceType}
-        category={category}
-        onSourceTypeChange={(v) => setSourceType(v)}
-        onCategoryChange={(v) => setCategory(v)}
-      />
+      <section className="home-feed">
+        <FilterBar
+          sourceType={sourceType}
+          category={category}
+          onSourceTypeChange={(v) => setSourceType(v)}
+          onCategoryChange={(v) => setCategory(v)}
+        />
 
-      {loading && articles.length === 0 ? (
-        <div className="loading">加载中...</div>
-      ) : articles.length === 0 ? (
-        <div className="empty">暂无数据，点击「立即抓取」开始采集</div>
-      ) : (
-        <>
-          <div className="articles-grid">
-            {articles.map((a) => (
-              <ArticleCard key={a.id} article={a} />
-            ))}
-          </div>
-          {hasMore && (
-            <button className="load-more" onClick={loadMore} disabled={loading}>
-              {loading ? '加载中...' : '加载更多'}
-            </button>
-          )}
-        </>
-      )}
+        {loading && articles.length === 0 ? (
+          <div className="loading">加载中...</div>
+        ) : articles.length === 0 ? (
+          <div className="empty">暂无数据，点击「立即抓取」开始采集</div>
+        ) : (
+          <>
+            <div className="articles-grid">
+              {articles.map((a) => (
+                <ArticleCard key={a.id} article={a} />
+              ))}
+            </div>
+            {hasMore && (
+              <button className="load-more" onClick={loadMore} disabled={loading}>
+                {loading ? '加载中...' : '加载更多'}
+              </button>
+            )}
+          </>
+        )}
+      </section>
     </div>
   );
 }

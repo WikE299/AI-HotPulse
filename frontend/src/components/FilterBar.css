@@ -2,9 +2,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 24px;
-  padding: 4px 0;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px 0 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
 }
 
 .filter-section {
@@ -14,22 +19,22 @@
 }
 
 .filter-section + .filter-section {
-  margin-left: 8px;
-  padding-left: 8px;
+  margin-left: 6px;
+  padding-left: 10px;
   border-left: 1px solid var(--border);
 }
 
 .filter-btn {
   font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 6px 14px;
+  padding: 7px 16px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: transparent;
-  color: var(--text-3);
+  color: var(--text-2);
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;

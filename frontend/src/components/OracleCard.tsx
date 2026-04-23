@@ -84,7 +84,9 @@ export function OracleCard() {
     setPos((prev) => {
       const centerX = prev.x + 24;
       const margin = 16;
-      const snapX = centerX < window.innerWidth / 2 ? margin : window.innerWidth - 48 - margin;
+      const sidebarW = window.innerWidth > 768 ? 232 : 0;
+      const leftEdge = sidebarW + margin;
+      const snapX = centerX < (sidebarW + window.innerWidth) / 2 ? leftEdge : window.innerWidth - 48 - margin;
       const snapY = clamp(prev.y, margin, window.innerHeight - 48 - margin);
       return { x: snapX, y: snapY };
     });

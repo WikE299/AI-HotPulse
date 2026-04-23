@@ -4,6 +4,15 @@
   padding: 32px 28px 64px;
 }
 
+.home-feed {
+  margin-top: 32px;
+  padding: 20px 24px 28px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
 .articles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));

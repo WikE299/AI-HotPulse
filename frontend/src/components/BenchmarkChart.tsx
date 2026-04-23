@@ -15,7 +15,7 @@ const ORG_COLORS: Record<string, string> = {
 };
 
 function getColor(org: string): string {
-  return ORG_COLORS[org] || '#e63946';
+  return ORG_COLORS[org] || '#6366F1';
 }
 
 interface Props {
@@ -43,30 +43,31 @@ export function BenchmarkChart({ models }: Props) {
       <div className="bench-label">BENCHMARK COMPARISON</div>
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={chartData} margin={{ top: 8, right: 12, left: -8, bottom: 0 }} barGap={2} barCategoryGap="20%">
-          <CartesianGrid stroke="#1f1f1f" vertical={false} />
+          <CartesianGrid stroke="#E2E5ED" vertical={false} />
           <XAxis
             dataKey="benchmark"
-            tick={{ fill: '#484848', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
-            axisLine={{ stroke: '#2a2a2a' }}
+            tick={{ fill: '#8E95A6', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
+            axisLine={{ stroke: '#D0D4DE' }}
             tickLine={false}
           />
           <YAxis
             domain={[0, 100]}
-            tick={{ fill: '#484848', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
+            tick={{ fill: '#8E95A6', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
             axisLine={false}
             tickLine={false}
             width={36}
           />
           <Tooltip
             contentStyle={{
-              background: '#161616',
-              border: '1px solid #2a2a2a',
-              borderRadius: 0,
+              background: '#FFFFFF',
+              border: '1px solid #D0D4DE',
+              borderRadius: 10,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
               fontFamily: 'JetBrains Mono, monospace',
               fontSize: 11,
-              color: '#f0f0f0',
+              color: '#1A1D26',
             }}
-            cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+            cursor={{ fill: 'rgba(99,102,241,0.06)' }}
             formatter={(value: unknown) => (value != null ? Number(value).toFixed(1) : 'N/A')}
           />
           <Legend
@@ -77,7 +78,7 @@ export function BenchmarkChart({ models }: Props) {
             }}
           />
           {models.map((m) => (
-            <Bar key={m.id} dataKey={m.model_name} fill={getColor(m.organization)} radius={[2, 2, 0, 0]} />
+            <Bar key={m.id} dataKey={m.model_name} fill={getColor(m.organization)} radius={[4, 4, 0, 0]} />
           ))}
         </BarChart>
       </ResponsiveContainer>

@@ -19,7 +19,7 @@ const ORG_COLORS: Record<string, string> = {
 };
 
 function orgColor(org: string): string {
-  return ORG_COLORS[org] || '#e63946';
+  return ORG_COLORS[org] || '#6366F1';
 }
 
 const BENCHMARKS = ['MMLU', 'HumanEval', 'MATH', 'GSM8K', 'ARC'] as const;
@@ -247,14 +247,14 @@ export function Arena() {
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="72%">
-                    <PolarGrid stroke="#2a2a2a" />
+                    <PolarGrid stroke="#E2E5ED" />
                     <PolarAngleAxis
                       dataKey="benchmark"
-                      tick={{ fill: '#484848', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
+                      tick={{ fill: '#8E95A6', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
                     />
                     <PolarRadiusAxis
                       domain={[0, 100]}
-                      tick={{ fill: '#383838', fontSize: 9 }}
+                      tick={{ fill: '#B8BDC9', fontSize: 9 }}
                       axisLine={false}
                     />
                     {selectedModels.map((m) => (
@@ -277,12 +277,13 @@ export function Arena() {
                     />
                     <Tooltip
                       contentStyle={{
-                        background: '#161616',
-                        border: '1px solid #2a2a2a',
-                        borderRadius: 0,
+                        background: '#FFFFFF',
+                        border: '1px solid #D0D4DE',
+                        borderRadius: 10,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                         fontFamily: 'JetBrains Mono, monospace',
                         fontSize: 11,
-                        color: '#f0f0f0',
+                        color: '#1A1D26',
                       }}
                       formatter={(value: unknown) => (value != null ? Number(value).toFixed(1) : 'N/A')}
                     />
@@ -310,32 +311,33 @@ export function Arena() {
               ) : (
                 <ResponsiveContainer width="100%" height={Math.max(280, barData.length * 28)}>
                   <BarChart data={barData} layout="vertical" margin={{ top: 0, right: 16, left: 0, bottom: 0 }} barCategoryGap="16%">
-                    <CartesianGrid stroke="#1f1f1f" horizontal={false} />
+                    <CartesianGrid stroke="#E2E5ED" horizontal={false} />
                     <XAxis
                       type="number"
                       domain={[0, 100]}
-                      tick={{ fill: '#484848', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
-                      axisLine={{ stroke: '#2a2a2a' }}
+                      tick={{ fill: '#8E95A6', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
+                      axisLine={{ stroke: '#D0D4DE' }}
                       tickLine={false}
                     />
                     <YAxis
                       type="category"
                       dataKey="name"
                       width={140}
-                      tick={{ fill: '#909090', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
+                      tick={{ fill: '#5A6070', fontSize: 10, fontFamily: 'JetBrains Mono, monospace' }}
                       axisLine={false}
                       tickLine={false}
                     />
                     <Tooltip
                       contentStyle={{
-                        background: '#161616',
-                        border: '1px solid #2a2a2a',
-                        borderRadius: 0,
+                        background: '#FFFFFF',
+                        border: '1px solid #D0D4DE',
+                        borderRadius: 10,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                         fontFamily: 'JetBrains Mono, monospace',
                         fontSize: 11,
-                        color: '#f0f0f0',
+                        color: '#1A1D26',
                       }}
-                      cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                      cursor={{ fill: 'rgba(99,102,241,0.06)' }}
                       formatter={(value: unknown) => (value != null ? Number(value).toFixed(1) : 'N/A')}
                     />
                     <Bar

@@ -3,15 +3,18 @@
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  border-top: 2px solid var(--border-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   text-decoration: none;
   color: inherit;
-  transition: border-top-color 0.15s, background 0.15s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .topic-card:hover {
-  border-top-color: var(--red);
-  background: var(--bg-3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .topic-header {
@@ -24,9 +27,10 @@
 }
 
 .topic-count {
-  padding: 1px 6px;
-  border: 1px solid var(--border-3);
+  padding: 2px 8px;
+  border: 1px solid var(--border);
   color: var(--text-3);
+  border-radius: var(--radius-xs);
 }
 
 .topic-heat {

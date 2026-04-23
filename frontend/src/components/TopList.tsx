@@ -10,10 +10,12 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 function HeatBlocks({ score }: { score: number }) {
-  const filled = Math.round(score / 2);
+  const pct = Math.min(score * 10, 100);
   return (
     <span className="tl-heat">
-      <span className="tl-heat-bar">{'█'.repeat(filled)}{'░'.repeat(5 - filled)}</span>
+      <span className="tl-heat-track">
+        <span className="tl-heat-fill" style={{ width: `${pct}%` }} />
+      </span>
       <span className="tl-heat-num">{score}</span>
     </span>
   );
@@ -38,7 +40,7 @@ export function TopList() {
       </div>
       <ol className="tl-list">
         {articles.map((a: Article, i: number) => (
-          <li key={a.id} className={`tl-item ${i < 3 ? 'tl-item--top' : ''}`}>
+          <li key={a.id} className={`tl-item ${i === 0 ? 'tl-item--first' : ''} ${i < 3 ? 'tl-item--top' : ''}`}>
             <span className={`tl-rank tl-rank--${i + 1}`}>{String(i + 1).padStart(2, '0')}</span>
             <div className="tl-body">
               <Link to={`/article/${a.id}`} className="tl-title-link">{a.title}</Link>

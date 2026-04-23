@@ -15,7 +15,7 @@ const ORG_COLORS: Record<string, string> = {
 };
 
 function orgColor(org: string): string {
-  return ORG_COLORS[org] || '#e63946';
+  return ORG_COLORS[org] || '#6366F1';
 }
 
 export function Timeline() {

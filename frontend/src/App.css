@@ -1,13 +1,1 @@
-*, *::before, *::after { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text-1);
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-}
-
-main {
-  min-height: calc(100vh - 88px);
-}
+/* merged into index.css */

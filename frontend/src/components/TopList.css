@@ -7,17 +7,30 @@
 }
 
 .tl-wrap {
-  border: 1px solid var(--border-2);
-  margin-bottom: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  background: var(--bg);
 }
 
 .tl-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   padding: 14px 20px 12px;
-  border-bottom: 1px solid var(--border-2);
-  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+}
+
+.tl-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tl-header-icon {
+  font-size: 14px;
 }
 
 .tl-title {
@@ -45,13 +58,43 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 11px 20px;
+  padding: 10px 20px;
   border-bottom: 1px solid var(--border);
-  transition: background 0.1s;
+  transition: background 0.25s ease, padding-left 0.25s ease;
+  cursor: pointer;
 }
 
 .tl-item:last-child { border-bottom: none; }
-.tl-item:hover { background: var(--bg-3); }
+
+.tl-item:hover {
+  background: var(--bg-2);
+  padding-left: 24px;
+}
+
+/* ── First item hero treatment ── */
+.tl-item--first {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, var(--red-dim) 0%, transparent 60%);
+  border-bottom: 1px solid var(--border);
+}
+
+.tl-item--first:hover {
+  padding-left: 24px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, transparent 60%);
+}
+
+.tl-item--first .tl-title-link {
+  font-size: 15px;
+  color: var(--text-1);
+}
+
+.tl-item--first .tl-rank {
+  font-size: 18px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 .tl-item--top .tl-title-link { color: var(--text-1); }
 
@@ -59,15 +102,20 @@
 .tl-rank {
   font-family: var(--mono);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   min-width: 26px;
   flex-shrink: 0;
   color: var(--text-3);
+  transition: transform 0.25s ease;
+}
+
+.tl-item:hover .tl-rank {
+  transform: scale(1.15);
 }
 
 .tl-rank--1 { color: var(--red); font-size: 15px; }
-.tl-rank--2 { color: #c0a060; }
-.tl-rank--3 { color: #808080; }
+.tl-rank--2 { color: #D97706; }
+.tl-rank--3 { color: #8E95A6; }
 
 .tl-body {
   flex: 1;
@@ -77,7 +125,7 @@
 .tl-title-link {
   display: block;
   font-family: var(--serif);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-2);
   text-decoration: none;
@@ -85,7 +133,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 3px;
-  transition: color 0.12s;
+  transition: color 0.2s;
 }
 
 .tl-title-link:hover { color: var(--text-1); }
@@ -102,12 +150,22 @@
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.06em;
-  padding: 1px 5px;
-  background: var(--text-3);
-  color: #fff;
+  padding: 2px 8px;
+  background: var(--bg-3);
+  color: var(--text-2);
+  border-radius: var(--radius-xs);
+  transition: background 0.25s, color 0.25s;
 }
 
-.tl-item--top .tl-badge { background: var(--red); }
+.tl-item:hover .tl-badge {
+  background: var(--red-dim);
+  color: var(--red);
+}
+
+.tl-item--top .tl-badge {
+  background: var(--accent-gradient);
+  color: #fff;
+}
 
 .tl-source {
   font-family: var(--mono);
@@ -121,22 +179,43 @@
   color: var(--text-3);
 }
 
-/* heat bar */
+/* ── Graphical heat bar with hover expand ── */
 .tl-heat {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
-.tl-heat-bar {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: -1px;
-  color: var(--text-3);
+.tl-heat-track {
+  width: 48px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.tl-item--top .tl-heat-bar { color: var(--red); }
+.tl-item:hover .tl-heat-track {
+  width: 80px;
+  height: 6px;
+}
+
+.tl-heat-fill {
+  display: block;
+  height: 100%;
+  background: var(--border-2);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+}
+
+.tl-item:hover .tl-heat-fill {
+  background: var(--accent-gradient);
+}
+
+.tl-item--top .tl-heat-fill {
+  background: var(--accent-gradient);
+}
 
 .tl-heat-num {
   font-family: var(--mono);
@@ -144,6 +223,12 @@
   font-weight: 600;
   color: var(--text-3);
   min-width: 14px;
+  transition: color 0.25s, transform 0.25s;
+}
+
+.tl-item:hover .tl-heat-num {
+  color: var(--red);
+  transform: scale(1.1);
 }
 
 .tl-item--top .tl-heat-num { color: var(--red); }
@@ -154,8 +239,12 @@
   color: var(--text-3);
   text-decoration: none;
   flex-shrink: 0;
-  padding: 4px;
-  transition: color 0.12s;
+  padding: 4px 6px;
+  border-radius: var(--radius-xs);
+  transition: color 0.2s, background 0.2s;
 }
 
-.tl-ext:hover { color: var(--red); }
+.tl-ext:hover {
+  color: var(--red);
+  background: var(--red-dim);
+}

@@ -1,16 +1,24 @@
 :root {
-  --bg:       #0a0a0a;
-  --bg-2:     #0f0f0f;
-  --bg-3:     #161616;
-  --bg-4:     #1e1e1e;
-  --border:   #1f1f1f;
-  --border-2: #2a2a2a;
-  --border-3: #383838;
-  --text-1:   #f0f0f0;
-  --text-2:   #909090;
-  --text-3:   #484848;
-  --red:      #e63946;
-  --red-dim:  rgba(230, 57, 70, 0.08);
+  --bg:       #FFFFFF;
+  --bg-2:     #F8F9FC;
+  --bg-3:     #F1F3F8;
+  --bg-4:     #E8EBF2;
+  --border:   #E2E5ED;
+  --border-2: #D0D4DE;
+  --border-3: #B8BDC9;
+  --text-1:   #1A1D26;
+  --text-2:   #5A6070;
+  --text-3:   #8E95A6;
+  --red:      #6366F1;
+  --red-dim:  rgba(99,102,241,0.08);
+  --accent-gradient: linear-gradient(135deg, #6366F1, #8B5CF6);
+  --accent-glow: rgba(139,92,246,0.15);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.1);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.12);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
   --serif:    'Playfair Display', Georgia, 'Times New Roman', serif;
   --mono:     'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
   --sans:     -apple-system, 'Helvetica Neue', Arial, sans-serif;
@@ -24,7 +32,7 @@ html { font-size: 16px; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--bg-2);
   color: var(--text-1);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
@@ -39,5 +47,20 @@ a { color: inherit; }
 button { font-family: inherit; }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border-3); }
+::-webkit-scrollbar-track { background: var(--bg-2); }
+::-webkit-scrollbar-thumb { background: var(--border-3); border-radius: 2px; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50%      { box-shadow: 0 0 0 6px transparent; }
+}

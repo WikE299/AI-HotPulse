@@ -12,11 +12,13 @@ const CAT_LABELS: Record<string, string> = {
 };
 
 function HeatBar({ score }: { score: number }) {
-  const filled = Math.round(score / 2);
+  const pct = Math.min(score * 10, 100);
   return (
-    <span className="heat-bar">
-      {'█'.repeat(filled)}{'░'.repeat(5 - filled)}
-      <span className="heat-num"> {score}</span>
+    <span className="heat-bar-wrap">
+      <span className="heat-bar-track">
+        <span className="heat-bar-fill" style={{ width: `${pct}%` }} />
+      </span>
+      <span className="heat-num">{score}</span>
     </span>
   );
 }

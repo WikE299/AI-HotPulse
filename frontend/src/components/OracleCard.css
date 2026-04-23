@@ -1,0 +1,232 @@
+/* ── FAB trigger ── */
+.oracle-fab {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent-gradient);
+  color: #fff;
+  cursor: grab;
+  z-index: 1000;
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transition: box-shadow 0.2s, left 0.3s cubic-bezier(0.22, 1, 0.36, 1), top 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.oracle-fab.dragging {
+  transition: box-shadow 0.2s;
+}
+
+.oracle-fab:active {
+  cursor: grabbing;
+}
+
+.oracle-fab:hover {
+  box-shadow: 0 6px 24px var(--accent-glow);
+}
+
+.oracle-fab--open {
+  background: var(--bg-3);
+  color: var(--text-2);
+  box-shadow: var(--shadow-sm);
+}
+
+.oracle-fab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Card ── */
+.oracle-card {
+  position: fixed;
+  width: 320px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  z-index: 999;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: var(--shadow-lg);
+  animation: oracleSlideUp 0.25s ease-out;
+}
+
+@keyframes oracleSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.oracle-card-inner {
+  padding: 20px;
+}
+
+/* ── Header ── */
+.oracle-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.oracle-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.oracle-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--bg-3);
+}
+
+.oracle-avatar-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.oracle-name {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+
+.oracle-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+/* ── Quote ── */
+.oracle-quote-wrap {
+  margin-bottom: 14px;
+  padding-left: 12px;
+  border-left: 3px solid;
+  border-image: var(--accent-gradient) 1;
+}
+
+.oracle-quote {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-2);
+  margin: 0;
+}
+
+/* ── Meta badges ── */
+.oracle-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.oracle-date {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+}
+
+.oracle-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Category colors */
+.oracle-badge--timeline { background: #E8E3F3; color: #6F42C1; }
+.oracle-badge--product  { background: #CCE5FF; color: #004085; }
+.oracle-badge--capability { background: #D4EDDA; color: #155724; }
+.oracle-badge--technical { background: #FFF3CD; color: #856404; }
+.oracle-badge--industry { background: var(--bg-3); color: var(--text-2); }
+
+/* Status colors */
+.oracle-badge--pending  { background: var(--bg-3); color: var(--text-3); }
+.oracle-badge--approaching { background: #FFF3CD; color: #856404; }
+.oracle-badge--fulfilled { background: #D4EDDA; color: #155724; }
+.oracle-badge--busted   { background: #F8D7DA; color: #721C24; }
+.oracle-badge--partial  { background: #CCE5FF; color: #004085; }
+.oracle-badge--unfalsifiable { background: #E8E3F3; color: #6F42C1; }
+
+/* ── Countdown ── */
+.oracle-countdown {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+
+.oracle-countdown strong {
+  color: var(--red);
+}
+
+/* ── Credibility note ── */
+.oracle-note {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-3);
+  background: var(--bg-2);
+  border-radius: var(--radius-xs);
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+
+/* ── Source link ── */
+.oracle-source {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--accent-gradient);
+  padding: 5px 14px;
+  border-radius: var(--radius-xs);
+  text-decoration: none;
+  transition: box-shadow 0.2s;
+}
+
+.oracle-source:hover {
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .oracle-card {
+    left: 12px !important;
+    right: 12px;
+    width: auto;
+  }
+}

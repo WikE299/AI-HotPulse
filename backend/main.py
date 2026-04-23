@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import init_db
-from app.api import articles, admin, topics, briefs, model_releases
+from app.api import articles, admin, topics, briefs, model_releases, predictions
 from app.scheduler import start_scheduler, shutdown_scheduler
 
 
@@ -32,6 +32,7 @@ app.include_router(admin.router, prefix="/api")
 app.include_router(topics.router, prefix="/api")
 app.include_router(briefs.router, prefix="/api")
 app.include_router(model_releases.router, prefix="/api")
+app.include_router(predictions.router, prefix="/api")
 
 
 @app.get("/health")

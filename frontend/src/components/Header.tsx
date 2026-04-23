@@ -31,8 +31,7 @@ export function Header() {
         <NavLink to="/topics" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>话题</NavLink>
         <NavLink to="/papers" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>论文</NavLink>
         <NavLink to="/brief" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>简报</NavLink>
-        <NavLink to="/timeline" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>Timeline</NavLink>
-        <NavLink to="/arena" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>Arena</NavLink>
+        <NavLink to="/models" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>模型</NavLink>
       </nav>
     </header>
   );

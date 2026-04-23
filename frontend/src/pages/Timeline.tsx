@@ -1,47 +1,22 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { fetchModelReleases } from '../api/client';
 import { BenchmarkChart } from '../components/BenchmarkChart';
+import { orgColor } from '../utils/orgColors';
 import type { ModelRelease } from '../types';
 import './Timeline.css';
 
-const ORG_COLORS: Record<string, string> = {
-  'OpenAI': '#74aa9c',
-  'Anthropic': '#d4a574',
-  'Google': '#4285f4',
-  'Meta': '#0668e1',
-  'Mistral AI': '#ff7000',
-  'DeepSeek': '#4a90d9',
-  'Alibaba': '#ff6a00',
-};
-
-function orgColor(org: string): string {
-  return ORG_COLORS[org] || '#6366F1';
+interface TimelineViewProps {
+  releases: ModelRelease[];
+  loading: boolean;
 }
 
-export function Timeline() {
-  const [releases, setReleases] = useState<ModelRelease[]>([]);
-  const [loading, setLoading] = useState(true);
+export function TimelineView({ releases, loading }: TimelineViewProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [orgFilter, setOrgFilter] = useState<string>('');
   const trackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setLoading(true);
-    fetchModelReleases(orgFilter || undefined)
-      .then(setReleases)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [orgFilter]);
 
   useEffect(() => {
     if (trackRef.current) {
       trackRef.current.scrollLeft = trackRef.current.scrollWidth;
     }
-  }, [releases]);
-
-  const orgs = useMemo(() => {
-    const set = new Set(releases.map((r) => r.organization));
-    return Array.from(set).sort();
   }, [releases]);
 
   const selected = releases.find((r) => r.id === selectedId) || null;
@@ -53,63 +28,37 @@ export function Timeline() {
     return [selected, ...neighbors.slice(0, 3)];
   }, [selected, releases]);
 
+  if (loading) return <div className="tl-status">LOADING…</div>;
+  if (!releases.length) return <div className="tl-status">NO DATA</div>;
+
   return (
-    <div className="tl-page">
-      <div className="tl-heading">
-        <div>
-          <h1 className="tl-page-title">Model Timeline</h1>
-          <p className="tl-page-sub">AI 模型发布时间轴 · Benchmark 数据对比</p>
-        </div>
-      </div>
-
-      <div className="tl-filters">
-        <button className={`tl-pill ${orgFilter === '' ? 'active' : ''}`} onClick={() => setOrgFilter('')}>ALL</button>
-        {orgs.map((org) => (
-          <button
-            key={org}
-            className={`tl-pill ${orgFilter === org ? 'active' : ''}`}
-            style={{ '--pill-color': orgColor(org) } as React.CSSProperties}
-            onClick={() => setOrgFilter(org === orgFilter ? '' : org)}
-          >
-            {org}
-          </button>
-        ))}
-      </div>
-
-      {loading && <div className="tl-status">LOADING…</div>}
-
-      {!loading && releases.length === 0 && (
-        <div className="tl-status">NO DATA</div>
-      )}
-
-      {!loading && releases.length > 0 && (
-        <div className="tl-track-wrap" ref={trackRef}>
-          <div className="tl-track">
-            <div className="tl-line" />
-            {releases.map((r, i) => {
-              const above = i % 2 === 0;
-              const isSelected = r.id === selectedId;
-              return (
-                <div
-                  key={r.id}
-                  className={`tl-node ${above ? 'tl-node--above' : 'tl-node--below'} ${isSelected ? 'tl-node--sel' : ''}`}
-                  onClick={() => setSelectedId(isSelected ? null : r.id)}
-                >
-                  <div className="tl-node-label">
-                    <span className="tl-node-name">{r.model_name}</span>
-                    <span className="tl-node-date">{r.release_date.slice(0, 7)}</span>
-                  </div>
-                  <div
-                    className="tl-dot"
-                    style={{ background: orgColor(r.organization), boxShadow: isSelected ? `0 0 0 3px ${orgColor(r.organization)}44` : 'none' }}
-                  />
-                  <div className="tl-node-connector" />
+    <>
+      <div className="tl-track-wrap" ref={trackRef}>
+        <div className="tl-track">
+          <div className="tl-line" />
+          {releases.map((r, i) => {
+            const above = i % 2 === 0;
+            const isSelected = r.id === selectedId;
+            return (
+              <div
+                key={r.id}
+                className={`tl-node ${above ? 'tl-node--above' : 'tl-node--below'} ${isSelected ? 'tl-node--sel' : ''}`}
+                onClick={() => setSelectedId(isSelected ? null : r.id)}
+              >
+                <div className="tl-node-label">
+                  <span className="tl-node-name">{r.model_name}</span>
+                  <span className="tl-node-date">{r.release_date.slice(0, 7)}</span>
                 </div>
-              );
-            })}
-          </div>
+                <div
+                  className="tl-dot"
+                  style={{ background: orgColor(r.organization), boxShadow: isSelected ? `0 0 0 3px ${orgColor(r.organization)}44` : 'none' }}
+                />
+                <div className="tl-node-connector" />
+              </div>
+            );
+          })}
         </div>
-      )}
+      </div>
 
       {selected && (
         <div className="tl-detail">
@@ -142,6 +91,6 @@ export function Timeline() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

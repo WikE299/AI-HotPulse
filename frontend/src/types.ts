@@ -81,3 +81,18 @@ export interface ModelRelease {
   announcement_url: string | null;
   category: string;
 }
+
+export interface Prediction {
+  id: string;
+  person_name: string;
+  person_title: string;
+  person_org: string;
+  avatar_file: string;
+  quote: string;
+  quote_source: string | null;
+  quote_date: string | null;
+  deadline: string | null;
+  category: string;
+  status: string;
+  credibility_note: string | null;
+}

@@ -16,3 +16,4 @@ frontend/.env
 
 # DB
 *.sqlite3
+*.db

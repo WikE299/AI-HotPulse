@@ -20,6 +20,11 @@ export async function fetchArticle(id: string): Promise<Article> {
   return data;
 }
 
+export async function fetchTwitterFeed(limit = 20): Promise<Article[]> {
+  const { data } = await api.get<Article[]>('/articles/twitter', { params: { limit } });
+  return data;
+}
+
 export async function fetchPapers(page = 1, pageSize = 20): Promise<ArticlesResponse> {
   const { data } = await api.get<ArticlesResponse>('/articles', {
     params: { source_type: 'academic', page, page_size: pageSize },

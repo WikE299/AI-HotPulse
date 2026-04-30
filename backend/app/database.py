@@ -35,6 +35,7 @@ async def _migrate(conn):
         ("articles", "paper_contribution", "TEXT"),
         ("articles", "readability_score", "INTEGER"),
         ("articles", "topic_id",          "TEXT"),
+        ("articles", "recommend_reason",  "TEXT"),
     ]
     for table, col, col_type in new_cols:
         try:

@@ -1,7 +1,8 @@
 async def generate_daily_brief(date: str, articles: list) -> str:
     from app.config import settings
-    if settings.anthropic_api_key:
-        return await _claude_brief(date, articles)
+    from app.analysis.claude_analyzer import _has_api_key, _call_llm
+    if _has_api_key():
+        return await _ai_brief(date, articles)
     return _template_brief(date, articles)
 
 
@@ -30,18 +31,15 @@ def _template_brief(date: str, articles: list) -> str:
     return "\n".join(lines)
 
 
-async def _claude_brief(date: str, articles: list) -> str:
-    import anthropic
-    from app.config import settings
-
-    client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+async def _ai_brief(date: str, articles: list) -> str:
+    from app.analysis.claude_analyzer import _call_llm
 
     articles_text = "\n\n".join(
         f"[{i + 1}] {a.title}\n来源：{getattr(a, 'source', '未知')}（{getattr(a, 'source_type', '未知')}）\n摘要：{getattr(a, 'summary', None) or '无'}"
-        for i, a in enumerate(articles[:20])
+        for i, a in enumerate(articles[:15])
     )
 
-    prompt = f"""请根据以下 {min(len(articles), 20)} 篇 AI 文章，生成一份 {date} 的每日 AI 简报，使用 Markdown 格式，包含：
+    prompt = f"""请根据以下 {min(len(articles), 15)} 篇 AI 文章，生成一份 {date} 的每日 AI 简报，使用 Markdown 格式，包含：
 
 ## 🔥 三大核心事件
 （3 条，每条 2-3 句话，说明事件意义）
@@ -57,9 +55,5 @@ async def _claude_brief(date: str, articles: list) -> str:
 
 只输出 Markdown 正文，不要额外说明。"""
 
-    message = await client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=1200,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return message.content[0].text.strip()
+    system = "你是一个专业的 AI 资讯编辑，擅长撰写简洁有力的每日简报。"
+    return await _call_llm(system, prompt)

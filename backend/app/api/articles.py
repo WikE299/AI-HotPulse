@@ -58,6 +58,22 @@ async def list_articles(
     }
 
 
+@router.get("/articles/twitter")
+async def twitter_feed(
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = (
+        select(Article)
+        .where(Article.source_type == "social")
+        .where(Article.source.like("Twitter @%"))
+        .order_by(desc(Article.published_at))
+        .limit(limit)
+    )
+    articles = (await db.scalars(stmt)).all()
+    return [_serialize(a) for a in articles]
+
+
 @router.get("/articles/{article_id}")
 async def get_article(article_id: str, db: AsyncSession = Depends(get_db)):
     article = await db.get(Article, article_id)
@@ -84,4 +100,5 @@ def _serialize(a: Article) -> dict:
         "paper_contribution": a.paper_contribution,
         "readability_score": a.readability_score,
         "topic_id": a.topic_id,
+        "recommend_reason": a.recommend_reason,
     }

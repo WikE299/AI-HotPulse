@@ -10,6 +10,7 @@ from app.crawlers.arxiv import ArXivCrawler
 from app.crawlers.hackernews import HackerNewsCrawler
 from app.crawlers.reddit import RedditCrawler
 from app.crawlers.rss_crawler import RSSCrawler
+from app.crawlers.twitter import TwitterCrawler
 from app.database import AsyncSessionLocal
 
 _AI_KEYWORDS = re.compile(
@@ -112,7 +113,7 @@ async def _cluster_topics(db, article_rows: list[dict], analyses: list[dict], un
 
 
 async def run_crawl_pipeline():
-    crawlers = [RSSCrawler(), HackerNewsCrawler(), ArXivCrawler(), RedditCrawler()]
+    crawlers = [RSSCrawler(), HackerNewsCrawler(), ArXivCrawler(), RedditCrawler(), TwitterCrawler()]
     all_raw = []
     for crawler in crawlers:
         try:

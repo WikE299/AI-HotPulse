@@ -40,3 +40,5 @@ class Article(Base):
     readability_score: Mapped[int | None] = mapped_column(Integer)
     # Topic clustering
     topic_id: Mapped[str | None] = mapped_column(String(36))
+    # Featured recommendation
+    recommend_reason: Mapped[str | None] = mapped_column(Text)

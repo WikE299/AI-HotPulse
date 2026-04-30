@@ -180,6 +180,31 @@
   overflow: hidden;
 }
 
+.ft-card-recommend {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--red-dim) 0%, transparent 80%);
+  border-radius: var(--radius-xs);
+  border-left: 2px solid var(--red);
+}
+
+.ft-recommend-icon {
+  font-size: 12px;
+  color: var(--red);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ft-recommend-text {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
 .ft-card-tags {
   display: flex;
   flex-wrap: wrap;

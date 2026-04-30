@@ -79,6 +79,12 @@ function FeaturedCard({ article }: { article: Article }) {
         </div>
         <h3 className="ft-card-title">{article.title}</h3>
         {article.summary && <p className="ft-card-summary">{article.summary}</p>}
+        {article.recommend_reason && (
+          <div className="ft-card-recommend">
+            <span className="ft-recommend-icon">✦</span>
+            <span className="ft-recommend-text">{article.recommend_reason}</span>
+          </div>
+        )}
         <div className="ft-card-tags">
           {article.keywords.slice(0, 4).map((kw) => (
             <span key={kw} className="ft-tag">{kw}</span>

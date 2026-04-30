@@ -14,6 +14,7 @@ export interface Article {
   paper_contribution: string | null;
   readability_score: number | null;
   topic_id: string | null;
+  recommend_reason: string | null;
 }
 
 export interface ArticlesResponse {

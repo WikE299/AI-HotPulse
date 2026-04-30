@@ -11,8 +11,6 @@ build/
 
 # Frontend
 node_modules/
-frontend/dist/
-frontend/.env
 
 # DB
 *.sqlite3

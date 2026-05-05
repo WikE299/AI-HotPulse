@@ -134,8 +134,8 @@ async def run_crawl_pipeline():
     if not unique_raw:
         return 0
 
-    if settings.anthropic_api_key:
-        from app.analysis.claude_analyzer import analyze_batch
+    from app.analysis.claude_analyzer import _has_api_key, analyze_batch
+    if _has_api_key():
         analyses = await analyze_batch(unique_raw)
     else:
         analyses = [

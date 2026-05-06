@@ -71,6 +71,10 @@ export function Sidebar() {
   }, [location.pathname]);
 
   async function handleTrigger() {
+    if (import.meta.env.PROD) {
+      alert('线上站点会自动同步热点数据。手动抓取已切到后台任务，请稍后刷新页面查看结果。');
+      return;
+    }
     try {
       await triggerCrawl();
       alert('爬取任务已启动，请稍后刷新页面');

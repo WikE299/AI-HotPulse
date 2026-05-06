@@ -12,9 +12,11 @@ from app.scheduler import start_scheduler, shutdown_scheduler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
-    start_scheduler()
+    if settings.enable_scheduler:
+        start_scheduler()
     yield
-    shutdown_scheduler()
+    if settings.enable_scheduler:
+        shutdown_scheduler()
 
 
 app = FastAPI(title="AI-HotPulse API", lifespan=lifespan)

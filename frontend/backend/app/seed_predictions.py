@@ -1,7 +1,9 @@
 import hashlib
-import json
 
-from sqlalchemy import text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
+
+from app.models.prediction import Prediction
 
 
 def _det_id(name: str, quote_prefix: str) -> str:
@@ -328,6 +330,7 @@ SEED_PREDICTIONS = [
 
 
 async def seed_predictions(conn):
+    dialect_name = conn.dialect.name
     for entry in SEED_PREDICTIONS:
         row = {
             "id": _det_id(entry["person_name"], entry["quote"]),
@@ -343,13 +346,12 @@ async def seed_predictions(conn):
             "status": entry.get("status", "pending"),
             "credibility_note": entry.get("credibility_note"),
         }
-        await conn.execute(
-            text(
-                "INSERT OR IGNORE INTO predictions "
-                "(id, person_name, person_title, person_org, avatar_file, quote, "
-                "quote_source, quote_date, deadline, category, status, credibility_note) VALUES "
-                "(:id, :person_name, :person_title, :person_org, :avatar_file, :quote, "
-                ":quote_source, :quote_date, :deadline, :category, :status, :credibility_note)"
-            ),
-            row,
-        )
+        if dialect_name == "postgresql":
+            stmt = pg_insert(Prediction).values(**row).on_conflict_do_nothing(
+                index_elements=[Prediction.id]
+            )
+        else:
+            stmt = sqlite_insert(Prediction).values(**row).on_conflict_do_nothing(
+                index_elements=[Prediction.id]
+            )
+        await conn.execute(stmt)

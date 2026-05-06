@@ -8,14 +8,16 @@ HN_TOP_STORIES = "https://hacker-news.firebaseio.com/v0/topstories.json"
 HN_ITEM = "https://hacker-news.firebaseio.com/v0/item/{}.json"
 AI_KEYWORDS = {"ai", "gpt", "llm", "ml", "machine learning", "deep learning", "neural",
                "openai", "anthropic", "gemini", "claude", "diffusion", "transformer"}
+MAX_STORIES = 40
+HN_TIMEOUT = 12.0
 
 
 class HackerNewsCrawler(BaseCrawler):
     async def fetch(self) -> list[RawArticle]:
         articles: list[RawArticle] = []
-        async with httpx.AsyncClient(timeout=30) as client:
+        async with httpx.AsyncClient(timeout=HN_TIMEOUT) as client:
             resp = await client.get(HN_TOP_STORIES)
-            story_ids = resp.json()[:100]
+            story_ids = resp.json()[:MAX_STORIES]
 
             import asyncio
             semaphore = asyncio.Semaphore(10)

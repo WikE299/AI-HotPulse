@@ -16,6 +16,8 @@ RSS_SOURCES = [
     ("The Verge AI", "english", "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml"),
     ("MIT Tech Review", "english", "https://www.technologyreview.com/feed/"),
 ]
+RSS_TIMEOUT = 8.0
+MAX_ENTRIES_PER_FEED = 10
 
 
 def _parse_time(entry) -> datetime | None:
@@ -45,12 +47,12 @@ def _extract_snippet(entry) -> str | None:
 class RSSCrawler(BaseCrawler):
     async def fetch(self) -> list[RawArticle]:
         articles: list[RawArticle] = []
-        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=RSS_TIMEOUT, follow_redirects=True) as client:
             for source_name, source_type, url in RSS_SOURCES:
                 try:
                     resp = await client.get(url, headers={"User-Agent": "Mozilla/5.0 AI-HotPulse/1.0"})
                     feed = feedparser.parse(resp.text)
-                    for entry in feed.entries[:20]:
+                    for entry in feed.entries[:MAX_ENTRIES_PER_FEED]:
                         link = entry.get("link", "")
                         title = entry.get("title", "").strip()
                         if not link or not title:

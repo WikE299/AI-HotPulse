@@ -10,12 +10,13 @@ ARXIV_FEED = (
     "?search_query=cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL"
     "&sortBy=submittedDate&sortOrder=descending&max_results=30"
 )
+ARXIV_TIMEOUT = 12.0
 
 
 class ArXivCrawler(BaseCrawler):
     async def fetch(self) -> list[RawArticle]:
         articles: list[RawArticle] = []
-        async with httpx.AsyncClient(timeout=30) as client:
+        async with httpx.AsyncClient(timeout=ARXIV_TIMEOUT) as client:
             try:
                 resp = await client.get(ARXIV_FEED)
                 feed = feedparser.parse(resp.text)

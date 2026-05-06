@@ -6,12 +6,13 @@ from app.crawlers.base import BaseCrawler, RawArticle
 
 REDDIT_URL = "https://www.reddit.com/r/MachineLearning/hot.json?limit=25"
 HEADERS = {"User-Agent": "AI-HotPulse/1.0 (educational project)"}
+REDDIT_TIMEOUT = 10.0
 
 
 class RedditCrawler(BaseCrawler):
     async def fetch(self) -> list[RawArticle]:
         articles: list[RawArticle] = []
-        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=REDDIT_TIMEOUT, follow_redirects=True) as client:
             try:
                 resp = await client.get(REDDIT_URL, headers=HEADERS)
                 data = resp.json()

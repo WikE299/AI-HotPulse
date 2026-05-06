@@ -1,5 +1,4 @@
 from datetime import datetime, timezone, timedelta
-import json
 import re
 import uuid
 
@@ -64,8 +63,16 @@ def _derive_topic_key(title: str) -> str | None:
     return None
 
 
+def _to_db_timestamp(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is not None:
+        return value.astimezone(timezone.utc).replace(tzinfo=None)
+    return value
+
+
 async def _cluster_topics(db, article_rows: list[dict], analyses: list[dict], unique_raw) -> None:
-    cutoff = (datetime.now(tz=timezone.utc) - timedelta(hours=72)).isoformat()
+    cutoff = _to_db_timestamp(datetime.now(tz=timezone.utc) - timedelta(hours=72))
     for row, analysis, raw in zip(article_rows, analyses, unique_raw):
         topic_key = analysis.get("topic_key")
         if not topic_key:
@@ -82,13 +89,13 @@ async def _cluster_topics(db, article_rows: list[dict], analyses: list[dict], un
         )
         existing = result.fetchone()
         heat = analysis.get("heat_score") or 0
-        now_iso = datetime.now(tz=timezone.utc).isoformat()
+        now_value = _to_db_timestamp(datetime.now(tz=timezone.utc))
 
         if existing:
             topic_id, count, old_heat = existing
             await db.execute(
                 text("UPDATE topics SET article_count = :c, heat_score = :h, latest_at = :n WHERE id = :id"),
-                {"c": count + 1, "h": max(old_heat, heat), "n": now_iso, "id": topic_id},
+                {"c": count + 1, "h": max(old_heat, heat), "n": now_value, "id": topic_id},
             )
         else:
             topic_id = str(uuid.uuid4())
@@ -105,7 +112,7 @@ async def _cluster_topics(db, article_rows: list[dict], analyses: list[dict], un
                     "summary": analysis.get("summary"),
                     "heat": heat,
                     "rep": row["id"],
-                    "now": now_iso,
+                    "now": now_value,
                 },
             )
 
@@ -149,7 +156,7 @@ async def run_crawl_pipeline():
             for _ in unique_raw
         ]
 
-    now = datetime.now(tz=timezone.utc).isoformat()
+    now = _to_db_timestamp(datetime.now(tz=timezone.utc))
     rows = []
     for raw, analysis in zip(unique_raw, analyses):
         rows.append({
@@ -158,12 +165,12 @@ async def run_crawl_pipeline():
             "source": raw.source,
             "source_type": raw.source_type,
             "original_url": raw.original_url,
-            "published_at": raw.published_at.isoformat() if raw.published_at else None,
+            "published_at": _to_db_timestamp(raw.published_at),
             "crawled_at": now,
             "image_url": raw.image_url,
             "content_snippet": raw.content_snippet,
             "summary": analysis.get("summary"),
-            "keywords": json.dumps(analysis.get("keywords") or []),
+            "keywords": analysis.get("keywords") or [],
             "category": analysis.get("category", "Other"),
             "heat_score": analysis.get("heat_score", 0),
             "paper_contribution": analysis.get("paper_contribution"),

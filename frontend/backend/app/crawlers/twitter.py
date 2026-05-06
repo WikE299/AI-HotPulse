@@ -30,6 +30,8 @@ TWITTER_ACCOUNTS = [
 ]
 
 MAX_TWEETS_PER_USER = 10
+TWITTER_TIMEOUT = 8.0
+TWITTER_CONCURRENCY = 4
 
 
 def _parse_time(entry) -> datetime | None:
@@ -58,33 +60,43 @@ def _extract_image(entry) -> str | None:
 class TwitterCrawler(BaseCrawler):
     async def fetch(self) -> list[RawArticle]:
         articles: list[RawArticle] = []
-        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
-            for handle, display_name in TWITTER_ACCOUNTS:
-                try:
-                    url = f"https://rsshub.app/twitter/user/handle/{handle}"
-                    resp = await client.get(
-                        url,
-                        headers={"User-Agent": "Mozilla/5.0 AI-HotPulse/1.0"},
-                    )
-                    if resp.status_code != 200:
-                        continue
-                    feed = feedparser.parse(resp.text)
-                    for entry in feed.entries[:MAX_TWEETS_PER_USER]:
-                        link = entry.get("link", "")
-                        title = entry.get("title", "").strip()
-                        if not link or not title:
-                            continue
-                        articles.append(
-                            RawArticle(
-                                title=title,
-                                original_url=link,
-                                source=f"Twitter @{handle}",
-                                source_type="social",
-                                published_at=_parse_time(entry),
-                                image_url=_extract_image(entry),
-                                content_snippet=_extract_snippet(entry),
-                            )
+        async with httpx.AsyncClient(timeout=TWITTER_TIMEOUT, follow_redirects=True) as client:
+            import asyncio
+            semaphore = asyncio.Semaphore(TWITTER_CONCURRENCY)
+
+            async def fetch_account(handle: str) -> list[RawArticle]:
+                async with semaphore:
+                    try:
+                        url = f"https://rsshub.app/twitter/user/handle/{handle}"
+                        resp = await client.get(
+                            url,
+                            headers={"User-Agent": "Mozilla/5.0 AI-HotPulse/1.0"},
                         )
-                except Exception:
-                    pass
+                        if resp.status_code != 200:
+                            return []
+                        feed = feedparser.parse(resp.text)
+                        account_articles: list[RawArticle] = []
+                        for entry in feed.entries[:MAX_TWEETS_PER_USER]:
+                            link = entry.get("link", "")
+                            title = entry.get("title", "").strip()
+                            if not link or not title:
+                                continue
+                            account_articles.append(
+                                RawArticle(
+                                    title=title,
+                                    original_url=link,
+                                    source=f"Twitter @{handle}",
+                                    source_type="social",
+                                    published_at=_parse_time(entry),
+                                    image_url=_extract_image(entry),
+                                    content_snippet=_extract_snippet(entry),
+                                )
+                            )
+                        return account_articles
+                    except Exception:
+                        return []
+
+            results = await asyncio.gather(*[fetch_account(handle) for handle, _display_name in TWITTER_ACCOUNTS])
+            for account_articles in results:
+                articles.extend(account_articles)
         return articles

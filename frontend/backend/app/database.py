@@ -39,7 +39,7 @@ async def _migrate(conn):
     ]
     for table, col, col_type in new_cols:
         try:
-            await conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}"))
+            async with conn.begin_nested():
+                await conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}"))
         except Exception:
-            pass  # Column already exists
-
+            pass  # Column already exists or backend doesn't support the alteration

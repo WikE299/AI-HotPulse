@@ -1,7 +1,10 @@
 import hashlib
 import json
 
-from sqlalchemy import text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
+
+from app.models.model_release import ModelRelease
 
 
 def _deterministic_id(model_name: str, org: str, date: str) -> str:
@@ -195,6 +198,7 @@ SEED_DATA = [
 
 
 async def seed_model_releases(conn):
+    dialect_name = conn.dialect.name
     for entry in SEED_DATA:
         row = {
             "id": _deterministic_id(entry["model_name"], entry["organization"], entry["release_date"]),
@@ -208,13 +212,12 @@ async def seed_model_releases(conn):
             "announcement_url": entry.get("announcement_url"),
             "category": entry.get("category", "LLM"),
         }
-        await conn.execute(
-            text(
-                "INSERT OR IGNORE INTO model_releases "
-                "(id, model_name, organization, version, release_date, parameters_size, "
-                "description, benchmarks, announcement_url, category) VALUES "
-                "(:id, :model_name, :organization, :version, :release_date, :parameters_size, "
-                ":description, :benchmarks, :announcement_url, :category)"
-            ),
-            row,
-        )
+        if dialect_name == "postgresql":
+            stmt = pg_insert(ModelRelease).values(**row).on_conflict_do_nothing(
+                index_elements=[ModelRelease.id]
+            )
+        else:
+            stmt = sqlite_insert(ModelRelease).values(**row).on_conflict_do_nothing(
+                index_elements=[ModelRelease.id]
+            )
+        await conn.execute(stmt)

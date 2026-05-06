@@ -6,6 +6,7 @@ export const ORG_COLORS: Record<string, string> = {
   'Mistral AI': '#ff7000',
   'DeepSeek': '#4a90d9',
   'Alibaba': '#ff6a00',
+  'xAI': '#1DA1F2',
 };
 
 export function orgColor(org: string): string {

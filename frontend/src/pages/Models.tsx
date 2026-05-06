@@ -1,18 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { fetchModelReleases } from '../api/client';
 import { orgColor, ORG_COLORS } from '../utils/orgColors';
-import { TimelineView } from './Timeline';
 import { ArenaView } from './Arena';
 import type { ModelRelease } from '../types';
 import './Models.css';
 
-type Tab = 'timeline' | 'arena';
-
 export function Models() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = (searchParams.get('tab') as Tab) || 'timeline';
-
   const [releases, setReleases] = useState<ModelRelease[]>([]);
   const [loading, setLoading] = useState(true);
   const [orgFilter, setOrgFilter] = useState<string | null>(null);
@@ -35,16 +28,12 @@ export function Models() {
     [releases, orgFilter],
   );
 
-  function switchTab(tab: Tab) {
-    setSearchParams({ tab });
-  }
-
   return (
     <div className="models-page">
       <div className="models-heading">
         <div>
           <h1 className="models-title">模型</h1>
-          <p className="models-sub">AI MODELS · TIMELINE & BENCHMARK ARENA</p>
+          <p className="models-sub">AI MODELS · BENCHMARK ARENA</p>
         </div>
       </div>
 
@@ -68,26 +57,7 @@ export function Models() {
         ))}
       </div>
 
-      <div className="models-tabs">
-        <button
-          className={`models-tab ${activeTab === 'timeline' ? 'active' : ''}`}
-          onClick={() => switchTab('timeline')}
-        >
-          TIMELINE
-        </button>
-        <button
-          className={`models-tab ${activeTab === 'arena' ? 'active' : ''}`}
-          onClick={() => switchTab('arena')}
-        >
-          ARENA
-        </button>
-      </div>
-
-      {activeTab === 'timeline' ? (
-        <TimelineView releases={filtered} loading={loading} />
-      ) : (
-        <ArenaView releases={filtered} loading={loading} />
-      )}
+      <ArenaView releases={filtered} loading={loading} />
     </div>
   );
 }

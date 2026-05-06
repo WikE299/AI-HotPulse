@@ -14,7 +14,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./frontend/backend
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
@@ -25,7 +25,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./backend:/app
+      - ./frontend/backend:/app
 
   frontend:
     build:

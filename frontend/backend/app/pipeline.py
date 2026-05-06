@@ -4,6 +4,8 @@ import re
 import uuid
 
 from sqlalchemy import text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from app.config import settings
 from app.crawlers.arxiv import ArXivCrawler
@@ -12,6 +14,7 @@ from app.crawlers.reddit import RedditCrawler
 from app.crawlers.rss_crawler import RSSCrawler
 from app.crawlers.twitter import TwitterCrawler
 from app.database import AsyncSessionLocal
+from app.models.article import Article
 
 _AI_KEYWORDS = re.compile(
     r"ai\b|a\.i\.|人工智能|artificial intelligence"
@@ -168,19 +171,17 @@ async def run_crawl_pipeline():
         })
 
     async with AsyncSessionLocal() as db:
+        dialect_name = db.bind.dialect.name if db.bind is not None else ""
         for row in rows:
-            await db.execute(
-                text(
-                    "INSERT OR IGNORE INTO articles "
-                    "(id, title, source, source_type, original_url, published_at, crawled_at, "
-                    "image_url, content_snippet, summary, keywords, category, heat_score, "
-                    "paper_contribution, readability_score) "
-                    "VALUES (:id, :title, :source, :source_type, :original_url, :published_at, :crawled_at, "
-                    ":image_url, :content_snippet, :summary, :keywords, :category, :heat_score, "
-                    ":paper_contribution, :readability_score)"
-                ),
-                row,
-            )
+            if dialect_name == "postgresql":
+                stmt = pg_insert(Article).values(**row).on_conflict_do_nothing(
+                    index_elements=[Article.original_url]
+                )
+            else:
+                stmt = sqlite_insert(Article).values(**row).on_conflict_do_nothing(
+                    index_elements=[Article.original_url]
+                )
+            await db.execute(stmt)
         await _cluster_topics(db, rows, analyses, unique_raw)
         await db.commit()
 

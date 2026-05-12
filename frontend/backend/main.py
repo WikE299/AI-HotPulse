@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -11,7 +12,11 @@ from app.scheduler import start_scheduler, shutdown_scheduler
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
+    try:
+        await asyncio.wait_for(init_db(), timeout=8)
+    except Exception as e:
+        import logging
+        logging.error(f"init_db failed: {e}")
     if settings.enable_scheduler:
         start_scheduler()
     yield

@@ -14,4 +14,4 @@ class DailyBrief(Base):
     date: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)  # "2026-04-22"
     content: Mapped[str] = mapped_column(Text, nullable=False)
     article_ids: Mapped[str] = mapped_column(Text, default="[]")  # JSON list
-    generated_at: Mapped[datetime | None] = mapped_column(TIMESTAMP)
+    generated_at: Mapped[datetime | None] = mapped_column(TIMESTAMP(timezone=True))
